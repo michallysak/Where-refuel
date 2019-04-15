@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId 'pl.michallysak.whererefuel'
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.13-beta-2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1-alpha03'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    //floating search view
+    implementation 'com.github.arimorty:floatingsearchview:2.1.1'
+    //maps
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    //location
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    //custom chrome tabs
+    implementation 'com.android.support:customtabs:28.0.0'
+    //room db
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    //rest
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    //worker
+    implementation "android.arch.work:work-runtime:1.0.1"
+    //oss
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'
+
+}

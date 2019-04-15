@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/license_name"
+        style="@style/H2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="@dimen/big_break"
+        android:layout_marginLeft="@dimen/big_break"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/license_message"
+        style="@style/H5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/medium_break"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="@dimen/medium_break"
+        android:layout_marginBottom="@dimen/medium_break"
+        android:background="@color/semi_gray"
+        android:padding="@dimen/medium_break">
+
+    </TextView>
+
+</LinearLayout>

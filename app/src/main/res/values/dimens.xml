@@ -1,0 +1,16 @@
+<resources>
+    <dimen name="very_big_break">128dp</dimen>
+    <dimen name="big_break">32dp</dimen>
+    <dimen name="medium_break">16dp</dimen>
+    <dimen name="small_break">8dp</dimen>
+    <dimen name="very_small_break">4dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+
+
+    <dimen name="h1">26sp</dimen>
+    <dimen name="h2">20sp</dimen>
+    <dimen name="h3">18sp</dimen>
+    <dimen name="h4">16sp</dimen>
+    <dimen name="h5">13sp</dimen>
+
+</resources>

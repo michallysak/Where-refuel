@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group
+        android:id="@+id/drawer_menu_view">
+
+        <item
+            android:id="@+id/action_home"
+            android:orderInCategory="100"
+            android:title="@string/home"
+            android:icon="@drawable/ic_home" />
+
+        <item
+            android:id="@+id/action_favourites"
+            android:orderInCategory="100"
+            android:title="@string/favourites_gas_station"
+            android:icon="@drawable/ic_star" />
+        
+
+        <item
+            android:id="@+id/action_add_new_gas_station"
+            android:orderInCategory="100"
+            android:title="@string/action_add"
+            android:icon="@drawable/ic_add" />
+
+    </group>
+
+    <group
+        android:id="@+id/drawer_menu_other">
+
+        <item
+            android:id="@+id/action_settings"
+            android:orderInCategory="100"
+            android:title="@string/settings"
+            android:icon="@drawable/ic_settings" />
+
+
+        <item
+            android:id="@+id/action_about"
+            android:orderInCategory="100"
+            android:title="@string/about"
+            android:icon="@drawable/ic_about" />
+    </group>
+
+</menu>

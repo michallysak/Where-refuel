@@ -1,0 +1,105 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "e947e356eb5b89b7ab653bf8389c69ad",
+    "entities": [
+      {
+        "tableName": "favourites_gas_station_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `company` TEXT, `city` TEXT, `address` TEXT, `e95` REAL NOT NULL, `e98` REAL NOT NULL, `lpg` REAL NOT NULL, `on` REAL NOT NULL, `lastUpdate` TEXT, `lat` REAL NOT NULL, `lng` REAL NOT NULL, `distance` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "company",
+            "columnName": "company",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "e95",
+            "columnName": "e95",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "e98",
+            "columnName": "e98",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lpg",
+            "columnName": "lpg",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "on",
+            "columnName": "on",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdate",
+            "columnName": "lastUpdate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lng",
+            "columnName": "lng",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distance",
+            "columnName": "distance",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e947e356eb5b89b7ab653bf8389c69ad\")"
+    ]
+  }
+}

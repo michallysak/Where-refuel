@@ -1,0 +1,166 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="pl.michallysak.whererefuel.ui.fragments.SortFragmentDialog">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/medium_break"
+        android:layout_marginRight="@dimen/medium_break">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/medium_break"
+                android:text="@string/sort_by"
+                android:textAppearance="@style/H3" />
+
+            <Button
+                android:tag="price"
+                android:id="@+id/button_sort"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/small_break"
+                android:layout_weight="1"
+                android:background="@drawable/button_blue"
+                android:text="@string/price"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/medium_break"
+                android:text="@string/fuel"
+                android:textAppearance="@style/H3" />
+
+            <Button
+                android:tag="price"
+                android:id="@+id/button_fuel"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/small_break"
+                android:layout_weight="1"
+                android:background="@drawable/button_blue"
+                android:text="e95"
+                android:textColor="@color/white" />
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/medium_break">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/medium_break"
+                android:text="@string/search_radius"
+                android:textAppearance="@style/H3" />
+
+            <TextView
+                android:id="@+id/textView_search_radius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingLeft="@dimen/medium_break"
+                android:text="15 km "
+                android:textAppearance="@style/H3" />
+
+
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBar_search_radius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_break"
+            android:layout_weight="10"
+            android:max="45"
+            android:paddingTop="@dimen/medium_break"
+            android:paddingBottom="@dimen/medium_break"
+            android:progress="10" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingTop="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:padding="@dimen/medium_break"
+                android:text="@string/favouriteGasStation"
+                android:textAppearance="@style/H3" />
+
+            <Button
+                android:id="@+id/button_company"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:background="@drawable/button_blue"
+                android:text=""
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/filter_station_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_break"
+            android:layout_marginBottom="@dimen/small_break"
+            android:padding="@dimen/medium_break"
+            android:background="@color/colorAccent"
+            android:text="@string/filter"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

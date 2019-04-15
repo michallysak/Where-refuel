@@ -1,0 +1,164 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="pl.michallysak.whererefuel.ui.fragments.SettingsFragment">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_settings"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginRight="?android:attr/actionBarSize"
+            android:layout_marginEnd="?android:attr/actionBarSize"
+            android:gravity="center"
+            style="@style/H1"
+            android:text="@string/settings" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="10"
+            android:paddingLeft="@dimen/medium_break"
+            android:text="@string/home"
+            android:textAppearance="@style/H3" />
+
+        <Button
+            android:tag="start_with"
+            android:id="@+id/button_home"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_break"
+            android:layout_weight="1"
+            android:background="@drawable/button_blue"
+            android:text="@string/list"
+            android:textColor="@color/white" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="10"
+            android:paddingLeft="@dimen/medium_break"
+            android:text="@string/current_location_when_start"
+            android:textAppearance="@style/H3" />
+
+        <Button
+            android:id="@+id/button_current_location_when_started"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_break"
+            android:layout_weight="1"
+            android:background="@drawable/button_blue"
+            android:tag="force_daily_map"
+            android:text="@string/yes"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="10"
+            android:paddingLeft="@dimen/medium_break"
+            android:text="@string/theme"
+            android:textAppearance="@style/H3" />
+
+        <Button
+            android:tag="theme"
+            android:id="@+id/button_theme_changer"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_break"
+            android:layout_weight="1"
+            android:background="@drawable/button_blue"
+            android:text="@string/theme_light"
+            android:textColor="@color/white" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_force_daily_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="10"
+
+            android:paddingLeft="@dimen/medium_break"
+            android:text="@string/force_daily_map"
+            android:textAppearance="@style/H3" />
+
+        <Button
+            android:id="@+id/button_force_daily_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_break"
+            android:layout_weight="1"
+            android:background="@drawable/button_blue"
+            android:tag="force_daily_map"
+            android:text="@string/no"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

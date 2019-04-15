@@ -1,0 +1,104 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pl.michallysak.whererefuel.ui.fragments.AboutFragment"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_about"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginRight="?android:attr/actionBarSize"
+            android:layout_marginEnd="?android:attr/actionBarSize"
+            android:gravity="center"
+            style="@style/H1"
+            android:text="@string/about" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_marginTop="@dimen/big_break"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/app_icon" />
+
+        <TextView
+            android:layout_marginTop="@dimen/big_break"
+            style="@style/H1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/app_name" />
+
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_marginTop="@dimen/small_break"
+            style="@style/H3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="by Michał Łysak" />
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_marginTop="@dimen/small_break"
+            style="@style/H4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/version" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/open_source_licences"
+        android:layout_gravity="center"
+        style="@style/H4"
+        android:padding="@dimen/small_break"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@string/open_source"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/privacy_policy"
+        android:layout_gravity="center"
+        style="@style/H4"
+        android:padding="@dimen/small_break"
+        android:layout_marginBottom="@dimen/medium_break"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@string/privacy_policy"
+        android:focusable="true" />
+
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,189 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pl.michallysak.whererefuel.ui.fragments.AddNewGasStationFragment"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_add_new_gas_station"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginRight="?android:attr/actionBarSize"
+            android:layout_marginEnd="?android:attr/actionBarSize"
+            android:gravity="center"
+            style="@style/H1"
+            android:text="@string/action_add" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_break"
+        android:layout_marginTop="@dimen/big_break"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_weight="2"
+                style="@style/H3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_break"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:text="@string/name" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_weight="1"
+                android:id="@+id/add_gas_station_name"
+                style="@style/H3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_break"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:inputType="text"
+                android:hint="@string/add_gas_station_name_hint" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_weight="2"
+                style="@style/H3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_break"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:text="@string/company" />
+
+            <AutoCompleteTextView
+                android:layout_weight="1"
+                android:id="@+id/add_gas_station_company"
+                style="@style/H3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_break"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:completionThreshold="1"
+                android:inputType="textAutoComplete"
+                android:hint="@string/choose_or_enter_your_own" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_weight="2"
+                style="@style/H3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_break"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:text="@string/city" />
+
+            <AutoCompleteTextView
+                android:layout_weight="1"
+                android:id="@+id/add_gas_station_city"
+                style="@style/H3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_break"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:completionThreshold="1"
+                android:inputType="textAutoComplete"
+                android:hint="@string/choose_or_enter_your_own" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_weight="2"
+                style="@style/H3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_break"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:text="@string/address" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_weight="1"
+                android:id="@+id/add_gas_station_address"
+                style="@style/H3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_break"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:inputType="text"
+                android:hint="@string/add_gas_station_address_hint" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_station_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_break"
+            android:padding="@dimen/medium_break"
+            android:background="@color/colorAccent"
+            android:text="@string/add"/>
+
+
+        <TextView
+            style="@style/H2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/small_break"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:text="@string/add_only_information" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
