@@ -69,7 +69,7 @@ public class SortFragmentDialog  extends DialogFragment {
 //        RADIUS
         final TextView seekTextView = view.findViewById(R.id.textView_search_radius);
         SeekBar seekBar = view.findViewById(R.id.seekBar_search_radius);
-        seekBar.setProgress(radius);
+        seekBar.setProgress(radius - 5);
         String s = radius + " km ";
         seekTextView.setText(s);
 
@@ -187,7 +187,7 @@ public class SortFragmentDialog  extends DialogFragment {
 
 //        COMPANY
 
-        if (!companies.get(0).equals(getString(R.string.all)))
+        if (companies.size() == 0 || !companies.get(0).equals(getString(R.string.all)))
             companies.add(0, getString(R.string.all));
 
         final String[] tab;

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Gdzie tankować</string>
-    <string name="search_hint">Wyszukaj misto tutaj</string>
+    <string name="search_hint">Wyszukaj miasto tutaj</string>
     <string name="action_speak">action_speak</string>
     <string name="action_current_location">action_current_location</string>
     <string name="theme_light">Jasny</string>
@@ -64,14 +64,14 @@
     <string name="report">Zgłoś</string>
     <string name="report_hint">Zgłoś zmianę lokalizacji lub nie istnienie stacji</string>
     <string name="enter_valid_message">Wprowadz prawidłową wiadomość</string>
-    <string name="add_gas_station_name_hint">e.g Stacja paliw BP</string>
+    <string name="add_gas_station_name_hint">np. Stacja paliw BP</string>
     <string name="gas_station_company">gas_station_company</string>
     <string name="name">Nazwa</string>
     <string name="company">Firma</string>
     <string name="add_gas_station_company_hint">gas_station_company_hint</string>
     <string name="city">Miasto</string>
     <string name="add_gas_station_address_hint">np. Batorego Street 45a</string>
-    <string name="add_gas_station_city_hint">e.g Wrocław</string>
+    <string name="add_gas_station_city_hint">np. Wrocław</string>
     <string name="choose_or_enter_your_own">Wybierz lub wpisz własną</string>
     <string name="add">Dodaj</string>
     <string name="enter_valid">Wprowadz poprawne</string>
@@ -97,5 +97,6 @@
     <string name="gas_station_grammar">stacji paliw</string>
     <string name="enter_at_least_one_change">Wprowadz przynajmniej jedną zmianę</string>
     <string name="update">Zaktualizuj</string>
+    <string name="no_change_fuel">Jeśli cena się nie zmieniła\n zostaw miejsce puste </string>
 
 </resources>

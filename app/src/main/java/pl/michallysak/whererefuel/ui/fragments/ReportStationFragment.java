@@ -37,7 +37,7 @@ public class ReportStationFragment extends DialogFragment {
     private Api api;
 
 
-    ReportStationFragment(GasStation currentGasStation, Context context) {
+    ReportStationFragment(GasStation currentGasStation) {
         this.gasStation = currentGasStation;
     }
 
@@ -84,21 +84,23 @@ public class ReportStationFragment extends DialogFragment {
 
         if (message.length() > 0) {
 
-
-            Call<List<Result>> call = api.reportStation(message + " " + gasStation.getId());
+            Call<List<Result>> call = api.reportStation(message + " \nID: " + gasStation.getId());
 
             Tools.log(call.request().toString());
-            reportBtn.setVisibility(View.GONE);
+            reportBtn.setClickable(false);
 
             call.enqueue(new Callback<List<Result>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Result>> call, @NonNull Response<List<Result>> response) {
                     Tools.toast(getContext(), getString(R.string.success_report_station));
+                    reportEditText.setText(null);
+                    reportBtn.setClickable(true);
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<List<Result>> call, @NonNull Throwable t) {
                     Tools.toast(getContext(), getString(R.string.error_report_station));
+                    reportBtn.setClickable(true);
                 }
             });
 
@@ -106,7 +108,7 @@ public class ReportStationFragment extends DialogFragment {
 
         } else {
             reportEditText.setError(getString(R.string.enter_valid_message));
-
+            reportBtn.setClickable(true);
         }
 
 

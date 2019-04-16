@@ -159,19 +159,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
 
         <com.google.android.material.button.MaterialButton
-            android:layout_weight="1"
             android:id="@+id/update_station_btn"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/medium_break"
             android:padding="@dimen/medium_break"
             android:background="@color/colorAccent"
             android:text="@string/update"/>
 
+
+        <TextView
+            style="@style/H2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/big_break"
+            android:paddingRight="@dimen/big_break"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:text="@string/no_change_fuel" />
 
     </LinearLayout>
 

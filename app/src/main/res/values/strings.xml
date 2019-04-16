@@ -97,5 +97,6 @@
     <string name="gas_station_grammar">gas station</string>
     <string name="enter_at_least_one_change">Enter at least one change</string>
     <string name="update">Update</string>
+    <string name="no_change_fuel">If the price has not changed,\n leave the place empty</string>
 
 </resources>

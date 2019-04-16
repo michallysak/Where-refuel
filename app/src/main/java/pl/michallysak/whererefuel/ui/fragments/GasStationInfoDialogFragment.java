@@ -91,7 +91,7 @@ public class GasStationInfoDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                ((MainActivity) context).showFragment(new ReportStationFragment(gasStation, getContext()));
+                ((MainActivity) context).showFragment(new ReportStationFragment(gasStation));
             }
         });
 

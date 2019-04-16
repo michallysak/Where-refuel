@@ -82,7 +82,6 @@ public class UpdateFuelPriceFragment extends Fragment {
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateButton.setClickable(false);
                 enqueueUpdatePrice();
             }
         });
@@ -188,6 +187,7 @@ public class UpdateFuelPriceFragment extends Fragment {
         Tools.hideKeyboard(getActivity());
 
         if (isValid()){
+            updateButton.setClickable(false);
 
             Call<List<Result>> call = api.updatePrice(gasStation.getId(), e95, e98, on, lpg);
 

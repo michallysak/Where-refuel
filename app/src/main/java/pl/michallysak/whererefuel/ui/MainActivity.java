@@ -303,7 +303,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
 
                 snackbar.show();
-                Tools.log("We can't download new gasStation. Check internet connections");
+                Tools.log("We can't download new gasStation. Check internet connections: " + t.getMessage());
+                if (t.getMessage().equals("Unable to resolve host \"michallysak.pl\": No address associated with hostname"))
+                    Tools.toast(getApplicationContext(), "Check DNS configuration");
             }
         });
     }
@@ -572,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         searchNearbyGasStation("");
                         break;
                     case R.id.action_sort:
+                        hideSnackBar();
                         SortFragmentDialog gasStationInfoDialogFragment = new SortFragmentDialog(companies);
                         FragmentManager fm = getSupportFragmentManager();
                         gasStationInfoDialogFragment.show(fm, "gas_station_info_dialog");
