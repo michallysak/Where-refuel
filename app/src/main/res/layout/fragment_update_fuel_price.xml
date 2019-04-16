@@ -20,7 +20,7 @@
             android:layout_marginEnd="?attr/actionBarSize"
             android:gravity="center"
             style="@style/H1"
-            android:text="@string/edit_fuel_price"/>
+            android:text="@string/update_fuel_price"/>
 
 
 
@@ -65,8 +65,7 @@
                 android:padding="@dimen/small_break"
                 android:textAlignment="center"
                 android:layout_gravity="center"
-                android:inputType="numberDecimal"
-                android:hint="price_95" />
+                android:inputType="numberDecimal"/>
 
         </LinearLayout>
 
@@ -86,16 +85,15 @@
                 android:text="E98" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_weight="1"
                 android:id="@+id/edit_gas_station_e98"
                 style="@style/H3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/small_break"
-                android:textAlignment="center"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:inputType="numberDecimal"
-                android:hint="price_98" />
+                android:padding="@dimen/small_break"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
@@ -123,8 +121,7 @@
                 android:padding="@dimen/small_break"
                 android:textAlignment="center"
                 android:layout_gravity="center"
-                android:inputType="numberDecimal"
-                android:hint="price_on" />
+                android:inputType="numberDecimal" />
 
         </LinearLayout>
 
@@ -152,8 +149,7 @@
                 android:padding="@dimen/small_break"
                 android:textAlignment="center"
                 android:layout_gravity="center"
-                android:inputType="numberDecimal"
-                android:hint="price_lpg" />
+                android:inputType="numberDecimal"/>
 
         </LinearLayout>
 
@@ -168,13 +164,13 @@
 
         <com.google.android.material.button.MaterialButton
             android:layout_weight="1"
-            android:id="@+id/save_station_btn"
-            android:layout_width="wrap_content"
+            android:id="@+id/update_station_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/medium_break"
             android:padding="@dimen/medium_break"
             android:background="@color/colorAccent"
-            android:text="@string/save"/>
+            android:text="@string/update"/>
 
 
     </LinearLayout>

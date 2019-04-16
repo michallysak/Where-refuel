@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,7 +35,7 @@ public class UpdateFuelPriceFragment extends Fragment {
     private EditText editOn;
     private EditText editLpg;
 
-    private ImageView updateButton;
+    private Button updateButton;
 
     private GasStation gasStation;
 
@@ -78,7 +78,7 @@ public class UpdateFuelPriceFragment extends Fragment {
         Tools.prepareToolbar(getContext(), toolbar, true);
 
 
-        updateButton = view.findViewById(R.id.save_station_btn);
+        updateButton = view.findViewById(R.id.update_station_btn);
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +173,11 @@ public class UpdateFuelPriceFragment extends Fragment {
         else if (fuelTemp.equals(editLpg.getHint().toString()))
             lpg = Double.parseDouble(fuelTemp);
 
+        if (editE95.getText().toString().equals("") && editE98.getText().toString().equals("")
+                && editLpg.getText().toString().equals("") && editOn.getText().toString().equals("")) {
+            Tools.toast(getContext(), getString(R.string.enter_at_least_one_change));
+            valid = false;
+        }
 
         return valid;
     }

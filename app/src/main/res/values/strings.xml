@@ -56,7 +56,7 @@
     <string name="report_gas_station">Report gas station</string>
     <string name="open_google_maps_to_navigate">Opening Google Maps to navigate to this gas station</string>
     <string name="home">Home</string>
-    <string name="edit_fuel_price">Edit fuel price</string>
+    <string name="update_fuel_price">Update fuel price</string>
     <string name="oops">Oops</string>
     <string name="empty_favourites">It looks like you have not added any fuel stations to your favorites yet</string>
     <string name="go_add_to_favourites">Let\'s add</string>
@@ -95,5 +95,7 @@
     <string name="error_update_fuel_price">Prices could not be updated</string>
     <string name="fuel">Fuel</string>
     <string name="gas_station_grammar">gas station</string>
+    <string name="enter_at_least_one_change">Enter at least one change</string>
+    <string name="update">Update</string>
 
 </resources>

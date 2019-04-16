@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Gdzie tankować</string>
     <string name="search_hint">Wyszukaj misto tutaj</string>
     <string name="action_speak">action_speak</string>
@@ -56,7 +56,7 @@
     <string name="report_gas_station">Zgłoś stację</string>
     <string name="open_google_maps_to_navigate">Otwieram Mapy Google, aby nawigować do stacji</string>
     <string name="home">Ekran domowy</string>
-    <string name="edit_fuel_price">Edytuj cenę paliwa</string>
+    <string name="update_fuel_price">Zaktualizuj cenę paliwa</string>
     <string name="oops">Ups</string>
     <string name="empty_favourites">Wygląda na to, że nie dodałeś jeszcze żadnej stacji do ulubionych</string>
     <string name="go_add_to_favourites">Dodaj</string>
@@ -95,5 +95,7 @@
     <string name="error_update_fuel_price">Nie udało się zaktualizować cen</string>
     <string name="fuel">Paliwo</string>
     <string name="gas_station_grammar">stacji paliw</string>
+    <string name="enter_at_least_one_change">Wprowadz przynajmniej jedną zmianę</string>
+    <string name="update">Zaktualizuj</string>
 
 </resources>
