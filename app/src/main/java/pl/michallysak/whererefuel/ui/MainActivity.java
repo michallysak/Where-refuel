@@ -168,6 +168,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         snackbar = Snackbar.make(fab, "", Snackbar.LENGTH_SHORT);
 
+
+
+        if (isPermissionsGranted()) {
+
+            showFragment(getDefualtFragment());
+
+            if (sharedPreferences.getBoolean("current_location_when_started", true)) {
+                getLastLocation();
+            }
+
+        }
+
+    }
+
+    private boolean isPermissionsGranted(){
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
 
@@ -175,19 +192,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
 
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+        if (!isPermissionsGranted()) {
             showFragment(new PermissionFragment());
-
         } else {
-            if (sharedPreferences.getBoolean("current_location_when_started", true)) {
-                showFragment(getDefualtFragment());
-                getLastLocation();
-            } else {
-                showFragment(getDefualtFragment());
-            }
-
             checkLocationSettings();
         }
 
@@ -255,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 double distance = Tools.getDistance(requestLocation.latitude, requestLocation.longitude, location.getLatitude(), location.getLongitude());
                 Tools.log("UPDATE LOCATION " + Tools.getFriendlyDistance(distance));
                 if (distance > 0.05 && isHomeDisplayed() && !snackbar.isShown()) {
-//                        Tools.toast(getApplicationContext(), "UPDATE LOCATION " + distance);
                     createSnackbar(getString(R.string.location_changes), LENGTH_INDEFINITE);
                     snackbar.setAction(R.string.search_again, new View.OnClickListener() {
                         @Override

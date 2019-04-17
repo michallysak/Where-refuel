@@ -1,5 +1,7 @@
 package pl.michallysak.whererefuel.ui.fragments;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,6 +35,7 @@ public class GasStationInfoDialogFragment extends DialogFragment {
     private GasStation gasStation;
     private Context context;
     private boolean favourite;
+    private ClipboardManager clipboard;
 
     private FavouriteGasStationDatabase favouritesDatabase;
 
@@ -51,6 +54,9 @@ public class GasStationInfoDialogFragment extends DialogFragment {
                 .build();
         FavouriteGasStation favouriteGasStation = favouritesDatabase.dao().get(gasStation.getId());
         favourite = favouriteGasStation != null;
+
+        clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+
 
         if (Tools.getTheme(context).equals("dark"))
             view.setBackgroundColor(context.getResources().getColor(R.color.gray));
@@ -71,15 +77,39 @@ public class GasStationInfoDialogFragment extends DialogFragment {
 
         TextView e95 = view.findViewById(R.id.gas_station_e95);
         e95.setText(gasStation.getReadyE95(getContext()));
+        e95.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyFuelPrice(gasStation.getE95());
+            }
+        });
 
         TextView e98 = view.findViewById(R.id.gas_station_e98);
         e98.setText(gasStation.getReadyE98(getContext()));
+        e95.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyFuelPrice(gasStation.getE95());
+            }
+        });
 
         TextView on = view.findViewById(R.id.gas_station_on);
         on.setText(gasStation.getReadyOn(getContext()));
+        on.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyFuelPrice(gasStation.getOn());
+            }
+        });
 
         TextView lpg = view.findViewById(R.id.gas_station_lpg);
         lpg.setText(gasStation.getReadyLpg(getContext()));
+        lpg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyFuelPrice(gasStation.getLpg());
+            }
+        });
 
 
         TextView lastUpdate = view.findViewById(R.id.gas_station_lastUpdate);
@@ -247,6 +277,11 @@ public class GasStationInfoDialogFragment extends DialogFragment {
 
 
         return view;
+    }
+
+    private void copyFuelPrice(double text){
+        Tools.toast(getContext(), getString(R.string.copy_to_clipbord));
+        clipboard.setPrimaryClip(ClipData.newPlainText("fuel price", String.valueOf(text)));
     }
 
     private void addToFavourite() {

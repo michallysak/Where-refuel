@@ -107,5 +107,6 @@
     <string name="gps_do_not_remind">Nie przypominaj</string>
     <string name="location_changes">Twoja lokalizacja zmieniła się znacząco</string>
     <string name="search_again">Szukaj ponownie</string>
+    <string name="copy_to_clipbord">Skopiowano do schowka</string>
 
 </resources>
