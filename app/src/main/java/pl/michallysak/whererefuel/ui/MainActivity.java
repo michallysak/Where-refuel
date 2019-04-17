@@ -2,11 +2,15 @@ package pl.michallysak.whererefuel.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,13 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -47,8 +51,6 @@ import pl.michallysak.whererefuel.api.Api;
 import pl.michallysak.whererefuel.api.GasStation;
 import pl.michallysak.whererefuel.db.cities.Cities;
 import pl.michallysak.whererefuel.db.cities.CitiesDatabase;
-import pl.michallysak.whererefuel.db.companies.Companies;
-import pl.michallysak.whererefuel.db.companies.CompaniesDatabase;
 import pl.michallysak.whererefuel.other.CitySuggestion;
 import pl.michallysak.whererefuel.other.PreferenceHelper;
 import pl.michallysak.whererefuel.other.Tools;
@@ -78,14 +80,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int radius;
     private String company;
 
+    boolean hadRequest = false;
+    boolean isRequestRunning = false;
+
     private FloatingSearchView searchView;
     private FloatingActionButton fab;
     private DrawerLayout drawer;
 
     private Fragment currentFragment;
+
+    private LatLng requestLocation;
     private LatLng currentLocation;
 
-    private List<GasStation> gasStations;
+    private List<GasStation> gasStations = new ArrayList<>();
 
     private Api api;
     private Activity activity = this;
@@ -110,16 +117,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return currentFragment;
     }
 
+    public Fragment getDefualtFragment() {
+        if (sharedPreferences.getString("home", "map").equals("map")) {
+            return new MapFragment(currentLocation, gasStations);
+        } else {
+            return new ListFragment(gasStations);
+        }
+    }
+
     public LatLng getCurrentLocation() {
         return currentLocation;
     }
 
-    @Override
-    protected void onResume() {
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */);
-        super.onResume();
 
-    }
+
+//    LIFECYCLE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         api = retrofit.create(Api.class);
 
-        setupLocation();
+        setUpLocation();
 
 
         if (Tools.getTheme(this).equals("light")) {
@@ -154,7 +166,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupSearchView();
         setupFab();
 
-        gasStations = new ArrayList<>();
+        snackbar = Snackbar.make(fab, "", Snackbar.LENGTH_SHORT);
+
+    }
+
+
+    @Override
+    protected void onResume() {
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -162,13 +180,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             showFragment(new PermissionFragment());
 
-        } else if (sharedPreferences.getBoolean("current_location_when_started", true)) {
-            showFragment(getDefualtFragment());
-            getLastLocation();
-        } else
-            showFragment(getDefualtFragment());
+        } else {
+            if (sharedPreferences.getBoolean("current_location_when_started", true)) {
+                showFragment(getDefualtFragment());
+                getLastLocation();
+            } else {
+                showFragment(getDefualtFragment());
+            }
+
+            checkLocationSettings();
+        }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */);
+        super.onResume();
 
     }
+
+
+//    PREFERENCES
+
+    public void setupPreferences() {
+        sharedPreferences = new PreferenceHelper(this);
+        sort = sharedPreferences.getString("sort", "price");
+        fuel = sharedPreferences.getString("fuel", "E95");
+        radius = sharedPreferences.getInt("radius", 15);
+        company = sharedPreferences.getString("company", "all");
+
+        double lat = sharedPreferences.getFloat("lat", 52.0881023f);
+        double lng = sharedPreferences.getFloat("lng", 19.4048991f);
+        currentLocation = new LatLng(lat, lng);
+
+    }
+
 
 //    LOCATION
 
@@ -191,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void setupLocation() {
+    private void setUpLocation() {
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -208,13 +251,75 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (locationResult == null) {
                     return;
                 }
-                for (Location location : locationResult.getLocations()) {
-                    Tools.log("UPDATE LOCATION " + location.getLatitude() + ", " + location.getLongitude());
-                    currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                Location location = locationResult.getLastLocation();
+                double distance = Tools.getDistance(requestLocation.latitude, requestLocation.longitude, location.getLatitude(), location.getLongitude());
+                Tools.log("UPDATE LOCATION " + Tools.getFriendlyDistance(distance));
+                if (distance > 0.05 && isHomeDisplayed() && !snackbar.isShown()) {
+//                        Tools.toast(getApplicationContext(), "UPDATE LOCATION " + distance);
+                    createSnackbar(getString(R.string.location_changes), LENGTH_INDEFINITE);
+                    snackbar.setAction(R.string.search_again, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            searchNearbyGasStation(lastQuery);
+                        }
+                    });
+                    snackbar.show();
                 }
+                currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
             }
         };
 
+
+    }
+
+    private void checkLocationSettings() {
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception e) {
+            Tools.log(e.getMessage());
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception e) {
+            Tools.log(e.getMessage());
+        }
+
+        if (!gps_enabled && !network_enabled) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.error_find_location)
+                    .setMessage(R.string.no_location_options)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.change_settings, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                    .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            checkLocationSettings();
+                        }
+                    }).show();
+
+        } else if (!gps_enabled && sharedPreferences.getBoolean("notify_gps_on", true) && !hadRequest) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.tip)
+                    .setMessage(R.string.only_network_location_options)
+                    .setPositiveButton(R.string.gps_do_not_remind, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            sharedPreferences.putBoolean("notify_gps_on", false);
+                        }
+                    })
+                    .setNegativeButton("Ok", null)
+                    .show();
+        }
 
     }
 
@@ -226,6 +331,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         double lat = currentLocation.latitude;
         double lng = currentLocation.longitude;
+
+        requestLocation = new LatLng(lat, lng);
 
         sharedPreferences.putFloat("lat", (float) lat);
         sharedPreferences.putFloat("lng", (float) lng);
@@ -243,25 +350,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void enqueueGasStationRequest(Call<List<GasStation>> call) {
-        Tools.log(call.request().toString());
-        call.enqueue(new Callback<List<GasStation>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<GasStation>> call, @NonNull Response<List<GasStation>> response) {
+        if (!isRequestRunning) {
+            Tools.toast(getApplicationContext(), getString(R.string.searching_for_stations));
+            isRequestRunning = true;
+            Tools.log(call.request().toString());
+            call.enqueue(new Callback<List<GasStation>>() {
+                @Override
+                public void onResponse(@NonNull Call<List<GasStation>> call, @NonNull Response<List<GasStation>> response) {
 
-                if (response.isSuccessful()) {
+                    if (response.isSuccessful()) {
 
-                    searchView.setSearchText(lastQuery);
+                        searchView.setSearchText(lastQuery);
 
-                    gasStations = response.body();
+                        gasStations = response.body();
 
-                    if (gasStations != null) {
-                        Tools.log("We download " + gasStations.size() + " station");
-                        showRequestResult();
-                        hideSnackBar();
+                        if (gasStations != null) {
+                            Tools.log("We download " + gasStations.size() + " station");
+                            showRequestResult();
+                            hideSnackBar();
+                        }
+
+
+                    } else {
+                        createSnackbar(
+                                getString(R.string.error_download_problem) + " " + getString(R.string.gas_station_grammar) + " \n" + getString(R.string.check_internet_connections),
+                                LENGTH_INDEFINITE);
+
+                        snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                searchNearbyGasStation(lastQuery);
+                            }
+                        });
+
+                        snackbar.show();
+
+                        Tools.log("We have problem with get new GasStation: " + response.code());
+
                     }
 
+                    isRequestRunning = false;
+                    hadRequest = true;
 
-                } else {
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<List<GasStation>> call, @NonNull Throwable t) {
                     createSnackbar(
                             getString(R.string.error_download_problem) + " " + getString(R.string.gas_station_grammar) + " \n" + getString(R.string.check_internet_connections),
                             LENGTH_INDEFINITE);
@@ -274,32 +408,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     });
 
                     snackbar.show();
-                    Tools.log("We have problem with get new GasStation: " + response.code());
+
+                    Tools.log("We can't download new gasStation. Check internet connections: " + t.getMessage());
+
+                    isRequestRunning = false;
                 }
+            });
+        } else {
+            Tools.toast(getApplicationContext(), getString(R.string.request_running));
+        }
 
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<GasStation>> call, @NonNull Throwable t) {
-                createSnackbar(
-                        getString(R.string.error_download_problem) + " " + getString(R.string.gas_station_grammar) + " \n" + getString(R.string.check_internet_connections),
-                        LENGTH_INDEFINITE);
-
-                snackbar.setAction(R.string.retry, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        searchNearbyGasStation(lastQuery);
-                    }
-                });
-
-                snackbar.show();
-                Tools.log("We can't download new gasStation. Check internet connections: " + t.getMessage());
-                if (t.getMessage().equals("Unable to resolve host \"michallysak.pl\": No address associated with hostname"))
-                    Tools.toast(getApplicationContext(), "Check DNS configuration");
-            }
-        });
     }
-
 
     private void showRequestResult() {
 
@@ -312,26 +431,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //    DB
 
 
-
-    //    PREFERENCES
-    public void setupPreferences() {
-        sharedPreferences = new PreferenceHelper(this);
-        sort = sharedPreferences.getString("sort", "price");
-        fuel = sharedPreferences.getString("fuel", "E95");
-        radius = sharedPreferences.getInt("radius", 15);
-        company = sharedPreferences.getString("company", "all");
-
-        double lat = sharedPreferences.getFloat("lat", 52.0881023f);
-        double lng = sharedPreferences.getFloat("lng", 19.4048991f);
-        currentLocation = new LatLng(lat, lng);
-
-    }
-
-
-    //    VIEW
+//    VIEW
 
     private void createSnackbar(String message, int duration) {
         snackbar = Snackbar.make(fab, message, duration);
@@ -385,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         final List<String> cities = new ArrayList<>();
 
-        for(Cities c: citiesDatabase.dao().getAll()){
+        for (Cities c : citiesDatabase.dao().getAll()) {
             cities.add(c.getName());
         }
 
@@ -532,7 +634,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.hide();
 //
 
-        if (requestFragment.getClass().equals(MapFragment.class)) {
+        if (requestFragment.getClass().equals(MapFragment.class) || requestFragment.getClass().equals(SupportMapFragment.class)) {
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_list));
         } else {
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_map));
@@ -574,13 +676,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public Fragment getDefualtFragment() {
-        if (sharedPreferences.getString("home", "map").equals("map")) {
-            return new MapFragment(currentLocation, gasStations);
-        } else {
-            return new ListFragment(gasStations);
-        }
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -648,17 +743,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
 
 
-//                super.onBackPressed();
-
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 List<Fragment> temp = fragmentManager.getFragments();
 
                 currentFragment = temp.get(temp.size() - 2);
 
                 if (isHomeDisplayed()) {
+                    setupFab();
                     showFragment(getDefualtFragment());
                     showHomeElements(true);
-                }else
+                } else
                     super.onBackPressed();
 
             }

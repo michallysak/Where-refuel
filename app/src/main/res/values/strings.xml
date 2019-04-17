@@ -98,5 +98,14 @@
     <string name="enter_at_least_one_change">Enter at least one change</string>
     <string name="update">Update</string>
     <string name="no_change_fuel">If the price has not changed,\n leave the place empty</string>
+    <string name="request_running">Please wait, we are still looking for previous stations</string>
+    <string name="searching_for_stations">Searching for gas stations..</string>
+    <string name="change_settings">Change settings</string>
+    <string name="only_network_location_options">Turn on GPS to improve gas station search accuracy</string>
+    <string name="tip">Tip</string>
+    <string name="no_location_options">Your location settings prevent the application from working properly</string>
+    <string name="gps_do_not_remind">Don\'t remind</string>
+    <string name="location_changes">You have changed your location significantly.</string>
+    <string name="search_again">Search again</string>
 
 </resources>
