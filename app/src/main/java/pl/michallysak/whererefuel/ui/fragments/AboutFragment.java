@@ -1,6 +1,7 @@
 package pl.michallysak.whererefuel.ui.fragments;
 
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
 import pl.michallysak.whererefuel.R;
 import pl.michallysak.whererefuel.other.Tools;
@@ -59,11 +62,7 @@ public class AboutFragment extends Fragment {
         view.findViewById(R.id.open_source_licences).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    ((MainActivity)getContext()).showFragment(new OpenSourceFragment());
-                }catch (Exception e){
-                    Tools.log(e.getMessage());
-                }
+                startActivity(new Intent(getContext(), OssLicensesMenuActivity.class));
             }
         });
 

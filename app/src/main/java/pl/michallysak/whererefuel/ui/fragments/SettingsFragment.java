@@ -104,16 +104,16 @@ public class SettingsFragment extends Fragment {
             forceButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sharedPreferences.putBoolean("force_daily_map", !force);
                     if (sharedPreferences.getBoolean("force_daily_map", false)){
-                        forceButton.setText(R.string.yes);
-                    }else {
                         forceButton.setText(R.string.no);
+                        sharedPreferences.putBoolean("force_daily_map", false);
+                    }else {
+                        forceButton.setText(R.string.yes);
+                        sharedPreferences.putBoolean("force_daily_map", true);
                     }
                 }
             });
 
-            buttonThemeChanger.setText(R.string.theme_dark);
         }
 
         buttonThemeChanger.setOnClickListener(new View.OnClickListener() {

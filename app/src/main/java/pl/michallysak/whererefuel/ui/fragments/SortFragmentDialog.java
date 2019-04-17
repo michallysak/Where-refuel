@@ -12,10 +12,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.room.Room;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.michallysak.whererefuel.R;
+import pl.michallysak.whererefuel.db.companies.Companies;
+import pl.michallysak.whererefuel.db.companies.CompaniesDatabase;
 import pl.michallysak.whererefuel.other.PreferenceHelper;
 import pl.michallysak.whererefuel.other.Tools;
 import pl.michallysak.whererefuel.ui.MainActivity;
@@ -36,9 +40,7 @@ public class SortFragmentDialog  extends DialogFragment {
     private int radius;
     private String company;
 
-    public SortFragmentDialog(List<String> companies) {
-        this.companies = companies;
-    }
+    public SortFragmentDialog() { }
 
 
     @Override
@@ -51,6 +53,15 @@ public class SortFragmentDialog  extends DialogFragment {
 
         sharedPreferences = new PreferenceHelper(getContext());
 
+        CompaniesDatabase companiesDatabase = Room.databaseBuilder(getContext(), CompaniesDatabase.class, "companiesDatabase")
+                .allowMainThreadQueries()
+                .build();
+
+        companies = new ArrayList<>();
+
+        for(Companies c: companiesDatabase.dao().getAll()){
+            companies.add(c.getName());
+        }
 
         Button filterButton = view.findViewById(R.id.filter_station_btn);
         filterButton.setOnClickListener(new View.OnClickListener() {

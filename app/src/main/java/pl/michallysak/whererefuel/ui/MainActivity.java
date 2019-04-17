@@ -44,8 +44,6 @@ import java.util.List;
 
 import pl.michallysak.whererefuel.R;
 import pl.michallysak.whererefuel.api.Api;
-import pl.michallysak.whererefuel.api.City;
-import pl.michallysak.whererefuel.api.Company;
 import pl.michallysak.whererefuel.api.GasStation;
 import pl.michallysak.whererefuel.db.cities.Cities;
 import pl.michallysak.whererefuel.db.cities.CitiesDatabase;
@@ -57,13 +55,12 @@ import pl.michallysak.whererefuel.other.Tools;
 import pl.michallysak.whererefuel.ui.fragments.AboutFragment;
 import pl.michallysak.whererefuel.ui.fragments.AddNewGasStationFragment;
 import pl.michallysak.whererefuel.ui.fragments.FavouritesFragment;
-import pl.michallysak.whererefuel.ui.fragments.GasStationInfoDialogFragment;
 import pl.michallysak.whererefuel.ui.fragments.ListFragment;
 import pl.michallysak.whererefuel.ui.fragments.MapFragment;
 import pl.michallysak.whererefuel.ui.fragments.PermissionFragment;
 import pl.michallysak.whererefuel.ui.fragments.SettingsFragment;
 import pl.michallysak.whererefuel.ui.fragments.SortFragmentDialog;
-import pl.michallysak.whererefuel.worker.FavouritesWorker;
+import pl.michallysak.whererefuel.worker.Updater;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,15 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
 
     private Fragment currentFragment;
-
-    private CompaniesDatabase companiesDatabase;
-    private CitiesDatabase citiesDatabase;
-
     private LatLng currentLocation;
 
     private List<GasStation> gasStations;
-    private List<String> cities;
-    private List<String> companies;
 
     private Api api;
     private Activity activity = this;
@@ -133,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        FavouritesWorker.startFavouritesWork();
+        Updater.startUpdater();
 
         setupPreferences();
 
@@ -147,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupLocation();
 
-        setupDb();
 
         if (Tools.getTheme(this).equals("light")) {
             setTheme(R.style.AppThemeLigth);
@@ -310,81 +300,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void enqueueCitiesRequest() {
-
-        Call<List<City>> call = api.getCities();
-
-        call.enqueue(new Callback<List<City>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<City>> call, @NonNull Response<List<City>> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        int added = 0;
-                        if (response.body() != null) {
-                            for (City city : response.body()) {
-                                String name = city.getName();
-                                if (!cities.contains(name)) {
-                                    citiesDatabase.dao().insert(new Cities(name));
-                                    cities.add(name);
-                                    //                                Tools.log(name);
-                                    added++;
-                                }
-                            }
-                        }
-
-                        Tools.log("We added " + added + " new records to CitiesDatabase");
-
-                    } catch (Exception e) {
-                        Tools.log("We have problem with get new Cities " + e.getMessage());
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<City>> call, @NonNull Throwable t) {
-                Tools.log("We can't get new Cities");
-            }
-
-        });
-    }
-
-    private void enqueueCompaniesRequest() {
-
-        Call<List<Company>> call = api.getCompanies();
-
-        call.enqueue(new Callback<List<Company>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Company>> call, @NonNull Response<List<Company>> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        int added = 0;
-                        if (response.body() != null) {
-                            for (Company company : response.body()) {
-                                String name = company.getName();
-                                if (!companies.contains(name)) {
-                                    companiesDatabase.dao().insert(new Companies(name));
-                                    companies.add(name);
-                                    added++;
-                                }
-                            }
-                        }
-
-                        Tools.log("We added " + added + " new records to CompanyDatabase");
-
-                    } catch (Exception e) {
-                        Tools.log("We have problem with get new Companies " + e.getMessage());
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Company>> call, @NonNull Throwable t) {
-                Tools.log("We can't get new Companies");
-            }
-        });
-    }
 
     private void showRequestResult() {
 
@@ -398,37 +313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //    DB
-    private void setupDb() {
-        companiesDatabase = Room.databaseBuilder(getApplicationContext(), CompaniesDatabase.class, "companiesDatabase")
-                .allowMainThreadQueries()
-                .build();
 
-        companies = new ArrayList<>();
-
-        if (companiesDatabase.dao().getSize() > 0) {
-            List<Companies> companiesList = companiesDatabase.dao().getAll();
-            for (Companies company : companiesList) {
-                companies.add(company.getName());
-            }
-        }
-
-        enqueueCompaniesRequest();
-
-        citiesDatabase = Room.databaseBuilder(getApplicationContext(), CitiesDatabase.class, "citiesDatabase")
-                .allowMainThreadQueries()
-                .build();
-
-        cities = new ArrayList<>();
-
-        if (citiesDatabase.dao().getSize() > 0) {
-            List<Cities> citiesList = citiesDatabase.dao().getAll();
-            for (Cities city : citiesList) {
-                cities.add(city.getName());
-            }
-        }
-
-        enqueueCitiesRequest();
-    }
 
 
     //    PREFERENCES
@@ -493,6 +378,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+
+        CitiesDatabase citiesDatabase = Room.databaseBuilder(this, CitiesDatabase.class, "citiesDatabase")
+                .allowMainThreadQueries()
+                .build();
+
+        final List<String> cities = new ArrayList<>();
+
+        for(Cities c: citiesDatabase.dao().getAll()){
+            cities.add(c.getName());
+        }
 
         searchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
@@ -575,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
                     case R.id.action_sort:
                         hideSnackBar();
-                        SortFragmentDialog gasStationInfoDialogFragment = new SortFragmentDialog(companies);
+                        SortFragmentDialog gasStationInfoDialogFragment = new SortFragmentDialog();
                         FragmentManager fm = getSupportFragmentManager();
                         gasStationInfoDialogFragment.show(fm, "gas_station_info_dialog");
                         break;
@@ -653,10 +548,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         currentFragment = fragment;
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        fragmentTransaction
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
                 .addToBackStack(null)
                 .replace(R.id.container, fragment)
                 .commit();
@@ -754,16 +648,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
 
 
-                super.onBackPressed();
+//                super.onBackPressed();
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 List<Fragment> temp = fragmentManager.getFragments();
 
-                currentFragment = temp.get(temp.size() - 1);
+                currentFragment = temp.get(temp.size() - 2);
 
                 if (isHomeDisplayed()) {
+                    showFragment(getDefualtFragment());
                     showHomeElements(true);
-                }
+                }else
+                    super.onBackPressed();
+
             }
 
 
