@@ -89,6 +89,8 @@ public class SettingsFragment extends Fragment {
         if (Tools.getTheme(getContext()).equals("light")) {
             buttonThemeChanger.setText(R.string.theme_light);
         } else {
+            buttonThemeChanger.setText(R.string.theme_dark);
+
             view.findViewById(R.id.layout_force_daily_map).setVisibility(View.VISIBLE);
 
             forceButton = view.findViewById(R.id.button_force_daily_map);

@@ -196,17 +196,21 @@ public class UpdateFuelPriceFragment extends Fragment {
             call.enqueue(new Callback<List<Result>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Result>> call, @NonNull Response<List<Result>> response) {
-                    Toast.makeText(getContext(), R.string.success_update_fuel_price, Toast.LENGTH_LONG).show();
+                    Tools.toast(getContext(), getString(R.string.success_update_fuel_price));
                     updateButton.setClickable(true);
                     editE95.setText(null);
                     editE98.setText(null);
                     editOn.setText(null);
                     editLpg.setText(null);
+                    editE95.setHint(String.valueOf(e95));
+                    editE98.setHint(String.valueOf(e98));
+                    editOn.setHint(String.valueOf(on));
+                    editLpg.setHint(String.valueOf(lpg));
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<List<Result>> call, @NonNull Throwable t) {
-                    Toast.makeText(getContext(), R.string.error_update_fuel_price, Toast.LENGTH_LONG).show();
+                    Tools.toast(getContext(), getString(R.string.error_update_fuel_price));
                     updateButton.setClickable(true);
                 }
             });

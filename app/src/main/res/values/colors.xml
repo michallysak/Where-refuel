@@ -8,5 +8,7 @@
     <color name="white">#ffffff</color>
     <color name="semi_gray">#1A000000</color>
     <color name="semi_white">#b5FFFFFF</color>
+    <color name="semi_blue">#4D2B5FA6</color>
     <color name="red">#e53030</color>
 </resources>
+

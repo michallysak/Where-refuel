@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -30,17 +31,24 @@ public class ListFragment extends Fragment implements DisplayGasStation {
 
     private RecyclerView recyclerView;
 
+    private ProgressBar progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
+        progressBar = view.findViewById(R.id.progress_bar);
+
         recyclerView = view.findViewById(R.id.recyclerView_list);
+        setProgressVisibility(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         if (gasStationList != null && gasStationList.size() > 0){
             showAll(gasStationList, false);
+        }else {
+            setProgressVisibility(false);
         }
 
         return view;
@@ -59,6 +67,8 @@ public class ListFragment extends Fragment implements DisplayGasStation {
         recyclerView.setAdapter(new GasStationAdapter(getContext(), gasStations, recyclerView, false));
         recyclerView.invalidate();
 
+        setProgressVisibility(false);
+
         return true;
     }
 
@@ -67,6 +77,13 @@ public class ListFragment extends Fragment implements DisplayGasStation {
         gasStationList.clear();
         showAll(gasStationList, false);
         return false;
+    }
+
+    public void setProgressVisibility(boolean visible){
+        if (visible)
+            progressBar.setVisibility(View.VISIBLE);
+        else
+            progressBar.setVisibility(View.GONE);
     }
 
 

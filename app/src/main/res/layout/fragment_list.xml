@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.ListFragment">
 
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progress_bar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center">
+
+    </ProgressBar>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="?attr/actionBarSize"

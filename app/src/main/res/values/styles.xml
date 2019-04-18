@@ -42,6 +42,9 @@
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+<!--        <item name="colorControlHighlight">@color/semi_blue</item>-->
+
     </style>
 
     <style name="AppThemeDark" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
@@ -80,6 +83,7 @@
         <item name="android:textColorPrimaryInverse">@color/white</item>
 
 
+        <item name="colorControlHighlight">@color/semi_blue</item>
 
     </style>
 

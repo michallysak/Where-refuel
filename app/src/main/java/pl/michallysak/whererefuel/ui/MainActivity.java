@@ -80,11 +80,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int radius;
     private String company;
 
-    boolean hadRequest = false;
-    boolean isRequestRunning = false;
+    private boolean hadRequest = false;
+    private boolean isRequestRunning = false;
 
     private FloatingSearchView searchView;
     private FloatingActionButton fab;
+    private NavigationView navigationView;
     private DrawerLayout drawer;
 
     private Fragment currentFragment;
@@ -166,8 +167,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupSearchView();
         setupFab();
 
-        snackbar = Snackbar.make(fab, "", Snackbar.LENGTH_SHORT);
+        snackbar = Snackbar.make(fab, "", LENGTH_INDEFINITE);
 
+        navigationView = findViewById(R.id.nav_view);
+//        navigationView.setCheckedItem(R.id.action_home);
+        navigationView.getMenu().performIdentifierAction(R.id.action_home, 0);
 
 
         if (isPermissionsGranted()) {
@@ -334,6 +338,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void searchNearbyGasStation(final String cityName) {
 
+        if (currentFragment.getClass().equals(ListFragment.class))
+            ((ListFragment)currentFragment).setProgressVisibility(true);
 
         double lat = currentLocation.latitude;
         double lng = currentLocation.longitude;
@@ -415,6 +421,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     snackbar.show();
 
+                    if (currentFragment.getClass().equals(ListFragment.class))
+                        ((ListFragment)currentFragment).setProgressVisibility(false);
+
                     Tools.log("We can't download new gasStation. Check internet connections: " + t.getMessage());
 
                     isRequestRunning = false;
@@ -428,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void showRequestResult() {
 
-        Toast.makeText(this, getString(R.string.we_find) + " " + gasStations.size() + " " + getString(R.string.gas_station_grammar), Toast.LENGTH_LONG).show();
+        Tools.toast(this, getString(R.string.we_find) + " " + gasStations.size() + " " + getString(R.string.gas_station_grammar));
 
         if (currentFragment.getClass().equals(MapFragment.class)) {
             ((MapFragment) currentFragment).showAll(gasStations, true);
@@ -706,10 +715,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        if (requestFragment != null && !requestFragment.getClass().equals(currentFragment.getClass()))
-            showFragment(requestFragment);
+        if (requestFragment != null && !requestFragment.getClass().equals(currentFragment.getClass())) {
 
-        drawer.closeDrawer(GravityCompat.START);
+            showFragment(requestFragment);
+            drawer.closeDrawer(GravityCompat.START);
+        }
+
+        menuItem.setCheckable(true);
+        menuItem.setChecked(true);
+
         return true;
     }
 
@@ -749,17 +763,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
 
 
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                List<Fragment> temp = fragmentManager.getFragments();
 
-                currentFragment = temp.get(temp.size() - 2);
+                try {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    List<Fragment> temp = fragmentManager.getFragments();
+                    currentFragment = temp.get(temp.size() - 2);
 
-                if (isHomeDisplayed()) {
+                    if (isHomeDisplayed()) {
+                        setupFab();
+                        showFragment(getDefualtFragment());
+                        showHomeElements(true);
+                        searchNearbyGasStation(lastQuery);
+                        navigationView.getMenu().performIdentifierAction(R.id.action_home, 0);
+                    } else
+                        super.onBackPressed();
+
+
+                }catch (Exception e){
                     setupFab();
                     showFragment(getDefualtFragment());
                     showHomeElements(true);
-                } else
-                    super.onBackPressed();
+                    Tools.log(e.getMessage());
+                }
+
+
+
 
             }
 

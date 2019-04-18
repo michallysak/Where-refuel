@@ -70,7 +70,7 @@
     <string name="company">Firma</string>
     <string name="add_gas_station_company_hint">gas_station_company_hint</string>
     <string name="city">Miasto</string>
-    <string name="add_gas_station_address_hint">np. Batorego Street 45a</string>
+    <string name="add_gas_station_address_hint">np. ul. Batorego45a</string>
     <string name="add_gas_station_city_hint">np. Wrocław</string>
     <string name="choose_or_enter_your_own">Wybierz lub wpisz własną</string>
     <string name="add">Dodaj</string>

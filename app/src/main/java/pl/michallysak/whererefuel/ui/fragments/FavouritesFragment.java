@@ -81,8 +81,9 @@ public class FavouritesFragment extends Fragment implements DisplayGasStation {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             try{
-                                Fragment fragment = ((MainActivity)getContext()).getDefualtFragment();
-                                ((MainActivity)getContext()).showFragment(fragment);
+                                ((MainActivity)getContext()).onBackPressed();
+//                                Fragment fragment = ((MainActivity)getContext()).getDefualtFragment();
+//                                ((MainActivity)getContext()).showFragment(fragment);
                             }catch (Exception e){
                                 Tools.log(e.getMessage());
                             }
