@@ -44,7 +44,7 @@
     <string name="gas_station_name">Station name</string>
     <string name="save">Save</string>
     <string name="current_location_when_start">Search nearby gas station when started</string>
-    <string name="all">All</string>
+    <string name="all">ALL</string>
     <string name="select_company">Select company</string>
     <string name="delete">Delete</string>
     <string name="gas_station_dont_exist">Don\'t exist</string>

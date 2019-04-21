@@ -149,7 +149,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         api = retrofit.create(Api.class);
 
+
         setUpLocation();
+
+
 
 
         if (Tools.getTheme(this).equals("light")) {
@@ -194,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onResume() {
-
 
         if (!isPermissionsGranted()) {
             showFragment(new PermissionFragment());
@@ -263,19 +265,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     return;
                 }
                 Location location = locationResult.getLastLocation();
-                double distance = Tools.getDistance(requestLocation.latitude, requestLocation.longitude, location.getLatitude(), location.getLongitude());
-                Tools.log("UPDATE LOCATION " + Tools.getFriendlyDistance(distance));
-                if (distance > 0.05 && isHomeDisplayed() && !snackbar.isShown()) {
-                    createSnackbar(getString(R.string.location_changes), LENGTH_INDEFINITE);
-                    snackbar.setAction(R.string.search_again, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            searchNearbyGasStation(lastQuery);
-                        }
-                    });
-                    snackbar.show();
+                try {
+                    double distance = Tools.getDistance(requestLocation.latitude, requestLocation.longitude, location.getLatitude(), location.getLongitude());
+                    Tools.log("UPDATE LOCATION " + Tools.getFriendlyDistance(distance));
+                    if (distance > 0.05 && isHomeDisplayed() && !snackbar.isShown()) {
+                        createSnackbar(getString(R.string.location_changes), LENGTH_INDEFINITE);
+                        snackbar.setAction(R.string.search_again, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                searchNearbyGasStation(lastQuery);
+                            }
+                        });
+                        snackbar.show();
+                    }
+                    currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                }catch (Exception e){
+                    Tools.log(e.getMessage());
                 }
-                currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
             }
         };
 
@@ -816,6 +823,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
             java.util.List results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             String spokenText = String.valueOf(results.get(0));
+
+            if (spokenText.equalsIgnoreCase("Zalej mnie"))
+                spokenText = "";
+
             searchView.setSearchText(spokenText);
             searchNearbyGasStation(spokenText);
         }

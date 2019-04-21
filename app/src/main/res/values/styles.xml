@@ -83,7 +83,7 @@
         <item name="android:textColorPrimaryInverse">@color/white</item>
 
 
-        <item name="colorControlHighlight">@color/semi_blue</item>
+<!--        <item name="colorControlHighlight">@color/semi_blue</item>-->
 
     </style>
 

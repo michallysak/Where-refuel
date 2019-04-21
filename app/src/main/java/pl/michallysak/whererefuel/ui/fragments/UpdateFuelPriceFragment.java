@@ -69,10 +69,49 @@ public class UpdateFuelPriceFragment extends Fragment {
         editOn = view.findViewById(R.id.edit_gas_station_on);
         editLpg = view.findViewById(R.id.edit_gas_station_lpg);
 
-        editE95.setHint(gasStation.getE95() + "");
-        editE98.setHint(gasStation.getE98() + "");
-        editOn.setHint(gasStation.getOn() + "");
-        editLpg.setHint(gasStation.getLpg() + "");
+        String noData = getString(R.string.no_data);
+        String tempHint;
+        double tempPrice;
+
+        tempPrice = gasStation.getE95();
+
+        if (tempPrice == 0)
+            tempHint = noData;
+        else
+            tempHint = tempPrice + "";
+
+        editE95.setHint(tempHint);
+
+
+        tempPrice = gasStation.getE98();
+
+        if (tempPrice == 0)
+            tempHint = noData;
+        else
+            tempHint = tempPrice + "";
+
+
+        editE98.setHint(tempHint);
+
+
+        tempPrice = gasStation.getOn();
+
+        if (tempPrice == 0)
+            tempHint = noData;
+        else
+            tempHint = tempPrice + "";
+
+        editOn.setHint(tempHint);
+
+
+        tempPrice = gasStation.getLpg();
+
+        if (tempPrice == 0)
+            tempHint = noData;
+        else
+            tempHint = tempPrice + "";
+
+        editLpg.setHint(tempHint);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar_edit);
         Tools.prepareToolbar(getContext(), toolbar, true);

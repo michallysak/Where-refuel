@@ -187,7 +187,6 @@ public class AddNewGasStationFragment extends Fragment {
 
                         enqueueAddNewStation();
 
-                        Tools.toast(getContext(), "We find you");
                     }
                 }
             });

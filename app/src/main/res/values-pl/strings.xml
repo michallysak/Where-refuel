@@ -44,7 +44,7 @@
     <string name="gas_station_name">Nazwa stacji</string>
     <string name="save">Zapisz</string>
     <string name="current_location_when_start">Szukaj stacji w pobliżu przy uruchomieniu aplikacji</string>
-    <string name="all">Wszystkie</string>
+    <string name="all">WSZYSTKIE</string>
     <string name="select_company">Wybierz firmę</string>
     <string name="delete">Usuń</string>
     <string name="gas_station_dont_exist">Nie istnieje</string>
@@ -75,7 +75,7 @@
     <string name="choose_or_enter_your_own">Wybierz lub wpisz własną</string>
     <string name="add">Dodaj</string>
     <string name="enter_valid">Wprowadz poprawne</string>
-    <string name="no_data">Brak\ndanych</string>
+    <string name="no_data">Brak danych</string>
     <string name="average">Średnia</string>
     <string name="error_find_location">Nie możemy Cię znaleźć</string>
     <string name="information_find_location">Znaleźliśmy Cię</string>
