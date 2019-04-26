@@ -1,11 +1,16 @@
 package pl.michallysak.whererefuel.ui.fragments;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +20,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -27,15 +36,20 @@ import pl.michallysak.whererefuel.R;
 import pl.michallysak.whererefuel.other.PreferenceHelper;
 import pl.michallysak.whererefuel.other.Tools;
 import pl.michallysak.whererefuel.ui.MainActivity;
+import pl.michallysak.whererefuel.ui.fragments.adapters.GasStationAdapter;
 import pl.michallysak.whererefuel.ui.fragments.display.DisplayGasStation;
 
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, DisplayGasStation, GoogleMap.OnMarkerClickListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, DisplayGasStation, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveStartedListener {
 
     private List<GasStation> gasStationList;
     private GoogleMap map;
     private boolean forceDark;
     private LatLng currentLocation;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private View view;
+
+    private RecyclerView recyclerView;
 
     public MapFragment(LatLng currentLocation, List<GasStation> gasStationList) {
         this.currentLocation = currentLocation;
@@ -48,9 +62,50 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Display
 
         forceDark = Tools.getTheme(getContext()).equals("dark") && !new PreferenceHelper(getContext()).getBoolean("force_daily_map", false);
 
-        View v = inflater.inflate(R.layout.fragment_map, container, false);
+        view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        try {
+
+        MaterialCardView llBottomSheet = view.findViewById(R.id.bottom_sheet);
+
+        if (Tools.getTheme(getContext()).equals("dark"))
+            llBottomSheet.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
+
+// init the bottom sheet behavior
+        bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+
+// change the state of the bottom sheet
+//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+// set the peek height
+        bottomSheetBehavior.setPeekHeight(340);
+
+// set hideable or not
+        bottomSheetBehavior.setHideable(false);
+
+// set callback for changes
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+        recyclerView = view.findViewById(R.id.recyclerView_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new GasStationAdapter(getContext(), gasStationList, recyclerView, false));
+        recyclerView.invalidate();
+
+        if (gasStationList != null && gasStationList.size() > 0){
+            showAll(gasStationList, false);
+        }else
+
+            try {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             SupportMapFragment sMap = SupportMapFragment.newInstance();
@@ -60,13 +115,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Display
             e.printStackTrace();
         }
 
-        return v;
+        return view;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
         map = googleMap;
+
+        map.setOnCameraMoveStartedListener(this);
 
         if (forceDark) {
             try {
@@ -81,6 +138,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Display
         map.getUiSettings().setMapToolbarEnabled(false);
         map.setMyLocationEnabled(true);
 
+
+
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12f));
         map.setOnMarkerClickListener(this);
 
@@ -88,6 +147,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Display
             showAll(gasStationList, false);
         }
 
+    }
+
+
+
+    @Override
+    public void onCameraMoveStarted(int i) {
+        switch (i) {
+            case GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE:
+                // The app moved the camera
+
+            case GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION:
+                // The user tapped something on the map
+
+            case GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION:
+                // The user gestured on the map
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                break;
+            default:
+                view.getParent().requestDisallowInterceptTouchEvent(false);
+                break;
+
+
+        }
     }
 
 
@@ -123,6 +205,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Display
             Tools.log(e.getMessage());
         }
 
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier("app_icon", "drawable", getContext().getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, 75, 75, false);
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resizedBitmap);
+
+//        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.app_icon);
+
+
 
         for (GasStation g : gasStations) {
             try {
@@ -131,6 +221,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Display
                         .position(new LatLng(g.getLat(), g.getLng())));
                 marker.setTag(g.getId());
                 marker.setTitle(g.getName());
+                marker.setIcon(icon);
 
             } catch (Exception e) {
                 e.printStackTrace();

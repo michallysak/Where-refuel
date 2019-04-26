@@ -1,5 +1,6 @@
 <resources>
     <dimen name="very_big_break">128dp</dimen>
+    <dimen name="medium_big_break">64dp</dimen>
     <dimen name="big_break">32dp</dimen>
     <dimen name="medium_break">16dp</dimen>
     <dimen name="small_break">8dp</dimen>
