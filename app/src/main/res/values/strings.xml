@@ -108,5 +108,10 @@
     <string name="location_changes">You have changed your location significantly.</string>
     <string name="search_again">Search again</string>
     <string name="copy_to_clipbord">Copy to clipboard</string>
+    <string name="within_radius_of">within a radius of</string>
+    <string name="sorted_by">sorted by</string>
+    <string name="gas_stations">Gas stations</string>
+    <string name="in">in</string>
+    <string name="loading">Loading..</string>
 
 </resources>

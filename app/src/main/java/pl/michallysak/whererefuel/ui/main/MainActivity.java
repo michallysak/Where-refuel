@@ -39,7 +39,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -57,7 +56,6 @@ import pl.michallysak.whererefuel.other.Tools;
 import pl.michallysak.whererefuel.ui.fragments.AboutFragment;
 import pl.michallysak.whererefuel.ui.fragments.AddNewGasStationFragment;
 import pl.michallysak.whererefuel.ui.fragments.FavouritesFragment;
-import pl.michallysak.whererefuel.ui.fragments.ListFragment;
 import pl.michallysak.whererefuel.ui.fragments.MapFragment;
 import pl.michallysak.whererefuel.ui.fragments.PermissionFragment;
 import pl.michallysak.whererefuel.ui.fragments.SettingsFragment;
@@ -84,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isRequestRunning = false;
 
     private FloatingSearchView searchView;
-    private FloatingActionButton fab;
+//    private FloatingActionButton fab;
     private NavigationView navigationView;
     private DrawerLayout drawer;
 
@@ -118,12 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return currentFragment;
     }
 
-    public Fragment getDefualtFragment() {
-        if (sharedPreferences.getString("home", "map").equals("map")) {
-            return new MapFragment(currentLocation, gasStations);
-        } else {
-            return new ListFragment(gasStations);
-        }
+    public Fragment getHomeFragment() {
+        return new MapFragment(currentLocation, gasStations);
     }
 
     public LatLng getCurrentLocation() {
@@ -164,22 +158,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        currentFragment = getDefualtFragment();
+        currentFragment = getHomeFragment();
 
         //setupUI
         setupSearchView();
-        setupFab();
+//        setupFab();
 
-        snackbar = Snackbar.make(fab, "", LENGTH_INDEFINITE);
+
 
         navigationView = findViewById(R.id.nav_view);
 //        navigationView.setCheckedItem(R.id.action_home);
         navigationView.getMenu().performIdentifierAction(R.id.action_home, 0);
 
 
+        snackbar = Snackbar.make(navigationView, "", LENGTH_INDEFINITE);
+
+
         if (isPermissionsGranted()) {
 
-            showFragment(getDefualtFragment());
+            showFragment(getHomeFragment());
 
             if (sharedPreferences.getBoolean("current_location_when_started", true)) {
                 getLastLocation();
@@ -269,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     double distance = Tools.getDistance(requestLocation.latitude, requestLocation.longitude, location.getLatitude(), location.getLongitude());
                     Tools.log("UPDATE LOCATION " + Tools.getFriendlyDistance(distance));
                     if (distance > 0.05 && isHomeDisplayed() && !snackbar.isShown()) {
-                        createSnackbar(getString(R.string.location_changes), LENGTH_INDEFINITE);
+                        createSnackbar(getString(R.string.location_changes));
                         snackbar.setAction(R.string.search_again, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -345,8 +342,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void searchNearbyGasStation(final String cityName) {
 
-        if (currentFragment.getClass().equals(ListFragment.class))
-            ((ListFragment)currentFragment).setProgressVisibility(true);
+//        if (currentFragment.getClass().equals(ListFragment.class))
+//            ((ListFragment)currentFragment).setProgressVisibility(true);
 
         double lat = currentLocation.latitude;
         double lng = currentLocation.longitude;
@@ -392,8 +389,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     } else {
                         createSnackbar(
-                                getString(R.string.error_download_problem) + " " + getString(R.string.gas_station_grammar) + " \n" + getString(R.string.check_internet_connections),
-                                LENGTH_INDEFINITE);
+                                getString(R.string.error_download_problem) + " " + getString(R.string.gas_station_grammar) + " \n" + getString(R.string.check_internet_connections)
+                        );
 
                         snackbar.setAction(R.string.retry, new View.OnClickListener() {
                             @Override
@@ -416,8 +413,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onFailure(@NonNull Call<List<GasStation>> call, @NonNull Throwable t) {
                     createSnackbar(
-                            getString(R.string.error_download_problem) + " " + getString(R.string.gas_station_grammar) + " \n" + getString(R.string.check_internet_connections),
-                            LENGTH_INDEFINITE);
+                            getString(R.string.error_download_problem) + " " + getString(R.string.gas_station_grammar) + " \n" + getString(R.string.check_internet_connections)
+                    );
 
                     snackbar.setAction(R.string.retry, new View.OnClickListener() {
                         @Override
@@ -428,8 +425,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     snackbar.show();
 
-                    if (currentFragment.getClass().equals(ListFragment.class))
-                        ((ListFragment)currentFragment).setProgressVisibility(false);
+//                    if (currentFragment.getClass().equals(ListFragment.class))
+//                        ((ListFragment)currentFragment).setProgressVisibility(false);
 
                     Tools.log("We can't download new gasStation. Check internet connections: " + t.getMessage());
 
@@ -446,19 +443,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Tools.toast(this, getString(R.string.we_find) + " " + gasStations.size() + " " + getString(R.string.gas_station_grammar));
 
-        if (currentFragment.getClass().equals(MapFragment.class)) {
+        if (currentFragment.getClass().equals(MapFragment.class))
             ((MapFragment) currentFragment).showAll(gasStations, true);
-        } else if (currentFragment.getClass().equals(ListFragment.class)) {
-            ((ListFragment) currentFragment).showAll(gasStations, false);
-        }
+//         else if (currentFragment.getClass().equals(ListFragment.class)) {
+//            ((ListFragment) currentFragment).showAll(gasStations, false);
+//        }
     }
 
 
 
 //    VIEW
 
-    private void createSnackbar(String message, int duration) {
-        snackbar = Snackbar.make(fab, message, duration);
+    private void createSnackbar(String message) {
+        snackbar = Snackbar.make(navigationView, message, Snackbar.LENGTH_INDEFINITE);
         if (Tools.getTheme(this).equals("light")) {
             snackbar.getView().setBackgroundColor(getResources().getColor(R.color.white));
             TextView textView = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
@@ -620,52 +617,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setItemIconTintList(color);
     }
 
-    private void setupFab() {
-        fab = findViewById(R.id.fab);
-        changeFabIcon(currentFragment);
-
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (currentFragment.getClass().equals(MapFragment.class)) {
-                    currentFragment = new ListFragment(gasStations);
-                } else {
-                    currentFragment = new MapFragment(currentLocation, gasStations);
-                }
-
-                changeFabIcon(currentFragment);
-
-                showFragment(currentFragment);
-                searchView.bringToFront();
-            }
-        });
-    }
-
-    public void setFabVisibility(boolean visibility) {
-        if (visibility)
-            fab.show();
-        else
-            fab.hide();
-    }
-
-    private void changeFabIcon(Fragment requestFragment) {
-
-//        because of problems with 28.0.0 library
-        fab.hide();
+//    private void setupFab() {
+//        fab = findViewById(R.id.fab);
+//        changeFabIcon(currentFragment);
 //
-
-        if (requestFragment.getClass().equals(MapFragment.class) || requestFragment.getClass().equals(SupportMapFragment.class)) {
-            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_list));
-        } else {
-            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_map));
-        }
-
-//        because of problems with 28.0.0 library
-        fab.show();
 //
-    }
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (currentFragment.getClass().equals(MapFragment.class)) {
+//                    currentFragment = new ListFragment(gasStations);
+//                } else {
+//                    currentFragment = new MapFragment(currentLocation, gasStations);
+//                }
+//
+//                changeFabIcon(currentFragment);
+//
+//                showFragment(currentFragment);
+//                searchView.bringToFront();
+//            }
+//        });
+//    }
+//
+//    public void setFabVisibility(boolean visibility) {
+//        if (visibility)
+//            fab.show();
+//        else
+//            fab.hide();
+//    }
+//
+//    private void changeFabIcon(Fragment requestFragment) {
+//
+////        because of problems with 28.0.0 library
+//        fab.hide();
+////
+//
+//        if (requestFragment.getClass().equals(MapFragment.class) || requestFragment.getClass().equals(SupportMapFragment.class)) {
+//            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_list));
+//        } else {
+//            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_map));
+//        }
+//
+////        because of problems with 28.0.0 library
+//        fab.show();
+////
+//    }
 
 
     public void showFragment(Fragment fragment) {
@@ -688,12 +685,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void showHomeElements(boolean show) {
         if (show) {
-            fab.show();
+//            fab.show();
             searchView.bringToFront();
             searchView.setVisibility(View.VISIBLE);
         } else {
             hideSnackBar();
-            fab.hide();
+//            fab.hide();
             searchView.setVisibility(View.GONE);
         }
     }
@@ -706,7 +703,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()) {
             case R.id.action_home:
-                requestFragment = getDefualtFragment();
+                requestFragment = getHomeFragment();
                 break;
             case R.id.action_favourites:
                 requestFragment = new FavouritesFragment();
@@ -742,7 +739,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public boolean isHomeDisplayed() {
         return currentFragment.getClass().equals(MapFragment.class)
-                || currentFragment.getClass().equals(ListFragment.class)
                 || currentFragment.getClass().equals(SupportMapFragment.class);
     }
 
@@ -777,8 +773,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     currentFragment = temp.get(temp.size() - 2);
 
                     if (isHomeDisplayed()) {
-                        setupFab();
-                        showFragment(getDefualtFragment());
+//                        setupFab();
+                        showFragment(getHomeFragment());
                         showHomeElements(true);
                         searchNearbyGasStation(lastQuery);
                         navigationView.getMenu().performIdentifierAction(R.id.action_home, 0);
@@ -787,8 +783,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                 }catch (Exception e){
-                    setupFab();
-                    showFragment(getDefualtFragment());
+//                    setupFab();
+                    showFragment(getHomeFragment());
                     showHomeElements(true);
                     Tools.log(e.getMessage());
                 }
@@ -807,7 +803,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
-        currentFragment = getDefualtFragment();
+        currentFragment = getHomeFragment();
     }
 
     private void displaySpeechRecognizer() {
